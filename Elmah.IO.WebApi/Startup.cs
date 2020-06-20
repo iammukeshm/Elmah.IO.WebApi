@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Elmah.Io.AspNetCore;
+using Elmah.Io.AspNetCore.HealthChecks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,8 +27,12 @@ namespace Elmah.IO.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<ElmahIoOptions>(Configuration.GetSection("ElmahIo"));
+            services.Configure<ElmahIoPublisherOptions>(Configuration.GetSection("ElmahHeartBeatSettings"));
+            services.AddHealthChecks().AddElmahIoPublisher();
+
+            services.Configure<ElmahIoOptions>(Configuration.GetSection("ElmahSettings"));
             services.AddElmahIo();
+
             services.AddControllers();
         }
 
@@ -38,7 +43,7 @@ namespace Elmah.IO.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseElmahIo();
             app.UseHttpsRedirection();
 
             app.UseRouting();
