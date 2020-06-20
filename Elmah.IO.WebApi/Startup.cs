@@ -30,7 +30,7 @@ namespace Elmah.IO.WebApi
             services.Configure<ElmahIoPublisherOptions>(Configuration.GetSection("ElmahHeartBeatSettings"));
             services.AddHealthChecks().AddElmahIoPublisher();
 
-            services.Configure<ElmahIoOptions>(Configuration.GetSection("ElmahSettings"));
+            services.Configure<ElmahIoOptions>(Configuration.GetSection("ElmahIo"));
             services.AddElmahIo();
 
             services.AddControllers();
